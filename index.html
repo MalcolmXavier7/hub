@@ -1,545 +1,836 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malcolm Xavier Davis</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Malcolm Xavier — MX7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#f2ede4;color:#0e0c08;font-family:'JetBrains Mono',monospace;overflow-x:hidden}
+::-webkit-scrollbar{width:3px;background:#f2ede4}
+::-webkit-scrollbar-thumb{background:#c8bfb0}
+img{display:block;max-width:100%}
 
-    :root {
-      --bg: #0a0a0a;
-      --bg-card: #0f0f0f;
-      --bg-card-hover: #141414;
-      --bg-verticals: #0d0d0d;
-      --text: #f0f0f0;
-      --text-muted: #666;
-      --accent: #b8ff57;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-thin: rgba(255, 255, 255, 0.06);
-      --mono: 'IBM Plex Mono', monospace;
-      --display: 'Syne', sans-serif;
-      --body: 'DM Sans', system-ui, sans-serif;
-    }
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes revealUp{from{opacity:0;transform:translateY(56px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-32px)}to{opacity:1;transform:translateX(0)}}
+@keyframes mobileIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
 
-    html {
-      scroll-behavior: smooth;
-    }
+.reveal{opacity:0;transform:translateY(48px);transition:opacity 0.8s cubic-bezier(0.22,1,0.36,1),transform 0.8s cubic-bezier(0.22,1,0.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--body);
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+/* ─── NAV ─── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 36px;height:56px;
+  background:rgba(242,237,228,0.88);
+  backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid rgba(14,12,8,0.1);
+  transition:all 0.3s;
+}
+.nav.scrolled{background:rgba(242,237,228,0.97);border-bottom-color:rgba(14,12,8,0.18)}
+.nav-logo{display:flex;align-items:baseline;gap:0;cursor:pointer;user-select:none}
+.nav-links{display:flex;gap:24px}
+.nav-link{font-size:9px;letter-spacing:3px;color:#6b6560;cursor:pointer;text-decoration:none;padding:3px 0;border-bottom:1px solid transparent;transition:all 0.2s}
+.nav-link:hover{color:#0e0c08;border-bottom-color:rgba(14,12,8,0.4)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#3a8c5a;animation:blink 2.4s ease infinite}
+.cta-nav{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;padding:8px 18px;background:#0e0c08;color:#f2ede4;border:none;cursor:pointer;transition:all 0.2s}
+.cta-nav:hover{background:#c8a44a;color:#0e0c08}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:transparent;border:none}
+.ham-line{width:22px;height:1.5px;background:#0e0c08;transition:all 0.3s;display:block}
+.hamburger.open .ham-line:nth-child(1){transform:rotate(45deg) translate(4px,5px)}
+.hamburger.open .ham-line:nth-child(2){opacity:0}
+.hamburger.open .ham-line:nth-child(3){transform:rotate(-45deg) translate(4px,-5px)}
+.mobile-nav{position:fixed;top:56px;inset:0;z-index:999;background:#f2ede4;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;animation:mobileIn 0.3s ease}
+.mnav-link{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,9vw,72px);letter-spacing:6px;color:#c8bfb0;cursor:pointer;transition:color 0.2s;padding:4px 0}
+.mnav-link:hover{color:#0e0c08}
 
-    /* ─── NAV ─────────────────────────────────────────────────── */
+/* ─── TICKER ─── */
+.ticker-wrap{background:#0e0c08;overflow:hidden;height:36px;display:flex;align-items:center;border-bottom:none}
+.ticker-track{display:flex;gap:0;animation:ticker 28s linear infinite;white-space:nowrap}
+.ticker-item{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:4px;color:#f2ede4;padding:0 28px;border-right:1px solid #2a2820;display:flex;align-items:center;gap:12px}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:#c8a44a;flex-shrink:0}
 
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background-color: rgba(10, 10, 10, 0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-bottom: 0.5px solid var(--border);
-      padding: 0 5vw;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+/* ─── HERO ─── */
+.hero{position:relative;background:#f2ede4;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;padding-top:56px}
+.hero-top-bar{display:flex;justify-content:space-between;align-items:center;padding:16px 36px;border-bottom:1px solid rgba(14,12,8,0.1);position:relative;z-index:3;flex-shrink:0}
+.hero-top-meta{font-size:8px;letter-spacing:3px;color:#6b6560}
+.hero-top-issue{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:5px;color:#0e0c08}
+/* 2-col hero: photo | content */
+.hero-main{flex:1;display:grid;grid-template-columns:420px 1fr;position:relative;z-index:2;min-height:500px}
+/* Photo column */
+.hero-photo-col{
+  position:relative;overflow:hidden;
+  border-right:1px solid rgba(14,12,8,0.1);
+  background:linear-gradient(180deg,#ede8de 0%,#e0d9ce 100%);
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.hero-photo-wrap{
+  width:100%;position:relative;z-index:2;
+  animation:float 7s ease-in-out infinite;
+}
+.hero-photo-wrap img{
+  width:100%;max-height:540px;object-fit:cover;object-position:top center;
+  display:block;
+}
+.hero-photo-ring{
+  position:absolute;inset:16px 16px 0 16px;
+  border:1px solid rgba(200,164,74,0.3);border-bottom:none;
+  pointer-events:none;z-index:3;
+}
+.hero-photo-corner{position:absolute;z-index:4;width:16px;height:16px;border-color:rgba(200,164,74,0.6);border-style:solid}
+.hero-photo-col-label{
+  position:absolute;bottom:16px;left:16px;
+  font-size:8px;letter-spacing:3px;color:rgba(14,12,8,0.3);z-index:4;
+}
+/* Content column */
+.hero-content-col{
+  padding:40px 48px;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.hero-giant{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(80px,11vw,160px);
+  line-height:0.85;letter-spacing:0.02em;color:#0e0c08;
+}
+.hero-sub-row{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0}
+.hero-role-pill{display:inline-block;padding:5px 13px;border:1px solid rgba(14,12,8,0.18);font-size:8px;letter-spacing:2px;color:#6b6560;transition:all 0.2s;cursor:default}
+.hero-role-pill:hover{background:#0e0c08;color:#f2ede4;border-color:#0e0c08}
+.hero-divider-line{width:60px;height:2px;background:#0e0c08;margin:20px 0}
+.hero-side-text{font-size:9px;letter-spacing:1px;color:#6b6560;line-height:2.2}
+.hero-side-text strong{color:#0e0c08;display:block;letter-spacing:2px}
+.hero-cta-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.hero-btn-blk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;padding:12px 26px;background:#0e0c08;color:#f2ede4;border:none;cursor:pointer;transition:all 0.2s}
+.hero-btn-blk:hover{background:#c8a44a;color:#0e0c08}
+.hero-btn-out{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;padding:12px 26px;background:transparent;color:#0e0c08;border:1px solid rgba(14,12,8,0.3);cursor:pointer;transition:all 0.2s}
+.hero-btn-out:hover{border-color:#0e0c08;background:#0e0c08;color:#f2ede4}
+.hero-accent-bar{position:absolute;left:0;top:0;width:6px;height:100%;background:#c8a44a;z-index:5}
+/* Stats */
+.hero-bottom-bar{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  border-top:2px solid #0e0c08;position:relative;z-index:4;
+  background:#f2ede4;flex-shrink:0;
+}
+.hero-stat-cell{padding:18px 28px;border-right:1px solid rgba(14,12,8,0.15);cursor:default;transition:background 0.2s}
+.hero-stat-cell:last-child{border-right:none}
+.hero-stat-cell:hover{background:rgba(200,164,74,0.08)}
+.hero-stat-n{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:#c8a44a}
+.hero-stat-l{font-size:8px;letter-spacing:3px;color:#6b6560;margin-top:3px}
 
-    .nav-mark {
-      font-family: var(--display);
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
+/* ─── SECTION STYLES ─── */
+.mag-section{padding:80px 36px;position:relative}
+.mag-section.dark{background:#0e0c08;color:#f2ede4}
+.mag-section.gold-bg{background:#c8a44a;color:#0e0c08}
+.mag-section.purple-bg{background:#7c4dba;color:#f2ede4}
+.mag-section.red-bg{background:#d94f38;color:#f2ede4}
+.mag-section.green-bg{background:#3a8c5a;color:#f2ede4}
+.mag-section.cream{background:#f2ede4;color:#0e0c08}
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
+.section-rule{height:2px;background:#0e0c08;margin-bottom:12px}
+.section-rule.light{background:rgba(242,237,228,0.3)}
+.section-rule.gold{background:#c8a44a}
 
-    .nav-links a {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
+.overline{font-size:8px;letter-spacing:5px;color:#6b6560;margin-bottom:8px}
+.overline.light{color:rgba(242,237,228,0.5)}
+.overline.gold-c{color:#c8a44a}
 
-    .nav-links a:hover {
-      color: var(--text);
-    }
+.display-xl{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,8vw,120px);line-height:0.9;letter-spacing:0.03em}
+.display-lg{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,5.5vw,80px);line-height:0.92;letter-spacing:0.03em}
+.display-md{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,3.5vw,52px);line-height:1;letter-spacing:0.04em}
+.body-sm{font-size:11px;line-height:2;color:#6b6560}
+.body-sm.light{color:rgba(242,237,228,0.6)}
 
-    /* ─── HERO ────────────────────────────────────────────────── */
+/* ─── THE 7 ─── */
+.the7-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-top:48px}
+.the7-card{
+  padding:28px 20px;border-right:1px solid rgba(14,12,8,0.12);
+  cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;
+  background:#f2ede4;min-height:320px;display:flex;flex-direction:column;
+}
+.the7-card:last-child{border-right:none}
+.the7-card:hover{background:#0e0c08;color:#f2ede4}
+.the7-card:hover .the7-card-num{color:rgba(242,237,228,0.2)}
+.the7-card:hover .the7-card-key{color:#f2ede4}
+.the7-card:hover .the7-card-icon{color:rgba(242,237,228,0.4)}
+.the7-card:hover .the7-card-blurb{color:rgba(242,237,228,0.6)}
+.the7-card:hover .the7-card-bar{opacity:1}
+.the7-card-bar{position:absolute;top:0;left:0;right:0;height:3px;opacity:0.4;transition:opacity 0.25s}
+.the7-card-num{font-size:9px;letter-spacing:3px;color:#c8bfb0;margin-bottom:auto;transition:color 0.25s}
+.the7-card-icon{font-size:24px;margin:28px 0 12px;transition:color 0.25s}
+.the7-card-key{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;margin-bottom:8px;transition:color 0.25s}
+.the7-card-blurb{font-size:9px;letter-spacing:0.5px;line-height:1.9;color:#6b6560;transition:color 0.25s}
 
-    #hero {
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6rem 5vw 4rem;
-    }
+/* Active tab panel */
+.the7-panel-area{border-top:2px solid #0e0c08;display:grid;grid-template-columns:1fr 2fr;min-height:300px}
+.the7-panel-left{padding:40px 36px;border-right:1px solid rgba(14,12,8,0.12);background:#f2ede4}
+.the7-panel-right{padding:40px 48px;background:#0e0c08;color:#f2ede4;position:relative;overflow:hidden;animation:fadeUp 0.3s ease}
+.the7-panel-ghost{
+  position:absolute;right:-20px;top:-20px;
+  font-family:'Bebas Neue',sans-serif;font-size:200px;
+  opacity:0.04;line-height:1;pointer-events:none;user-select:none;
+}
 
-    .hero-label {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 2.5rem;
-    }
+/* ─── PROJECTS ─── */
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:40px}
+.proj-card{
+  background:#fff8f0;padding:32px 28px;
+  cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;
+  border:1px solid rgba(14,12,8,0.08);
+}
+.proj-card::after{content:'';position:absolute;left:0;bottom:0;right:0;height:3px;transform:scaleX(0);transition:transform 0.3s;transform-origin:left}
+.proj-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(14,12,8,0.12)}
+.proj-card:hover::after{transform:scaleX(1)}
+.proj-card-shimmer{position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(200,164,74,0.08),transparent);transition:left 0.5s ease;pointer-events:none}
+.proj-card:hover .proj-card-shimmer{left:160%}
+.proj-zone{font-size:8px;letter-spacing:3px;padding:3px 10px;border:1px solid;display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;transition:all 0.2s}
+.proj-card:hover .proj-zone{padding-left:14px}
+.proj-year{font-size:9px;color:#6b6560;letter-spacing:1px}
+.proj-title{font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;margin-bottom:8px}
+.proj-type{font-size:8px;letter-spacing:3px;color:#6b6560;margin-bottom:14px}
+.proj-desc{font-size:10px;color:#6b6560;line-height:1.9}
+.proj-arrow{font-size:9px;letter-spacing:2px;margin-top:22px;display:flex;align-items:center;gap:8px;transition:gap 0.2s}
+.proj-card:hover .proj-arrow{gap:14px}
+.proj-filters{display:flex;gap:6px;flex-wrap:wrap}
+.pfil{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;padding:7px 14px;background:transparent;border:1px solid rgba(14,12,8,0.2);color:#6b6560;cursor:pointer;transition:all 0.15s}
+.pfil:hover{border-color:#0e0c08;color:#0e0c08}
+.pfil.active{background:#0e0c08;color:#f2ede4;border-color:#0e0c08}
 
-    .hero-heading {
-      font-family: var(--display);
-      font-weight: 800;
-      font-size: clamp(3.5rem, 9vw, 8rem);
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      margin-bottom: 2rem;
-    }
+/* ─── LOVE YOURS CLUB ─── */
+.lyc-hero{
+  display:grid;grid-template-columns:1fr 1fr;min-height:560px;
+}
+.lyc-left{
+  background:#d94f38;padding:64px 52px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.lyc-right{
+  background:#0e0c08;display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(5,1fr);
+  gap:2px;padding:2px;
+}
+.lyc-word{
+  background:#18140c;display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;
+  color:rgba(217,79,56,0.25);cursor:pointer;transition:all 0.2s;
+}
+.lyc-word:hover{background:#d94f38;color:#f2ede4;font-size:14px}
+.lyc-ghost{
+  position:absolute;font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(120px,18vw,200px);color:rgba(242,237,228,0.06);
+  line-height:1;right:-20px;bottom:-20px;pointer-events:none;user-select:none;
+}
+.lyc-badge{font-size:8px;letter-spacing:4px;padding:5px 14px;border:1px solid rgba(242,237,228,0.4);color:rgba(242,237,228,0.7);display:inline-block;margin-bottom:20px}
+.lyc-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,8vw,110px);line-height:0.88;color:#f2ede4;margin-bottom:24px}
+.lyc-desc{font-size:11px;color:rgba(242,237,228,0.65);line-height:2;margin-bottom:32px;max-width:380px}
+.lyc-cta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;padding:12px 28px;background:#f2ede4;color:#d94f38;border:none;cursor:pointer;transition:all 0.2s;align-self:flex-start}
+.lyc-cta:hover{background:#0e0c08;color:#f2ede4}
 
-    .hero-heading span {
-      display: block;
-    }
+/* ─── BLOG ─── */
+.blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:40px}
+.blog-card{
+  background:#fff8f0;padding:36px 32px;border:1px solid rgba(14,12,8,0.08);
+  cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+}
+.blog-card:hover{border-color:rgba(14,12,8,0.3);transform:translateY(-3px);box-shadow:0 12px 40px rgba(14,12,8,0.08)}
+.blog-card-full{grid-column:1/-1;display:grid;grid-template-columns:80px 1fr auto;gap:28px;align-items:start}
+.blog-num-big{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;opacity:0.12;color:#0e0c08}
+.blog-tag-pill{font-size:8px;letter-spacing:3px;padding:3px 10px;border:1px solid;display:inline-block;margin-bottom:10px}
+.blog-date{font-size:9px;color:#6b6560;letter-spacing:1px}
+.blog-title-lg{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1.05;margin-bottom:10px}
+.blog-excerpt{font-size:10px;color:#6b6560;line-height:1.9}
+.blog-read{font-size:9px;letter-spacing:2px;color:#6b6560;white-space:nowrap;padding-top:32px;transition:all 0.2s}
+.blog-card:hover .blog-read{color:#0e0c08}
 
-    .hero-body {
-      font-size: clamp(1rem, 1.5vw, 1.125rem);
-      font-weight: 300;
-      color: var(--text-muted);
-      max-width: 520px;
-      line-height: 1.7;
-      margin-bottom: 3rem;
-    }
+/* ─── PHILOSOPHY ─── */
+.philosophy-bg{background:#0e0c08;color:#f2ede4;padding:100px 36px;text-align:center;position:relative;overflow:hidden}
+.phil-ghost{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,18vw,200px);color:rgba(200,164,74,0.04);white-space:nowrap;pointer-events:none;letter-spacing:16px;user-select:none}
+.morph-box{display:inline-block;padding:24px 56px;border:1px solid rgba(200,164,74,0.4);background:rgba(200,164,74,0.06);margin-top:44px}
 
-    .hero-cta {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: opacity 0.2s ease;
-    }
+/* ─── CONNECT ─── */
+.connect-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:40px}
+.connect-card{background:#fff8f0;padding:28px 32px;border:1px solid rgba(14,12,8,0.08);display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s}
+.connect-card:hover{background:#0e0c08;color:#f2ede4;border-color:#0e0c08}
+.connect-card:hover .con-sub{color:rgba(242,237,228,0.5)}
+.connect-card:hover .con-arrow{color:#f2ede4}
+.con-label{font-size:11px;letter-spacing:2px;margin-bottom:4px;font-weight:500}
+.con-sub{font-size:9px;color:#6b6560;letter-spacing:1px;transition:color 0.2s}
+.con-arrow{font-size:20px;color:#6b6560;transition:color 0.2s}
 
-    .hero-cta:hover {
-      opacity: 0.7;
-    }
+/* ─── FOOTER ─── */
+footer{background:#0e0c08;color:#f2ede4;padding:28px 36px;display:flex;justify-content:space-between;align-items:center}
+.footer-sig{display:flex;align-items:baseline;gap:2px}
 
-    /* ─── TWO-COLUMN LAYOUT ───────────────────────────────────── */
+/* ─── TWEAKS ─── */
+.tweaks-panel{position:fixed;bottom:24px;right:24px;z-index:9999;background:rgba(242,237,228,0.97);border:1px solid rgba(14,12,8,0.2);backdrop-filter:blur(20px);padding:20px 22px;min-width:230px;display:none;box-shadow:0 8px 32px rgba(14,12,8,0.15)}
+.tweaks-panel.open{display:block}
+.tw-title{font-size:9px;letter-spacing:3px;color:#0e0c08;margin-bottom:16px;font-weight:700}
+.tw-row{margin-bottom:12px}
+.tw-label{font-size:8px;letter-spacing:2px;color:#6b6560;margin-bottom:7px}
+.tw-opts{display:flex;gap:6px;flex-wrap:wrap}
+.tw-opt{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;padding:5px 10px;border:1px solid rgba(14,12,8,0.2);color:#6b6560;background:transparent;cursor:pointer;transition:all 0.15s}
+.tw-opt:hover,.tw-opt.active{border-color:#0e0c08;color:#0e0c08;background:rgba(14,12,8,0.06)}
 
-    .two-col {
-      padding: 6rem 5vw;
-      border-top: 0.5px solid var(--border);
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .col-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      padding-top: 0.25rem;
-    }
-
-    .col-body p {
-      font-size: 1rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      line-height: 1.8;
-      max-width: 600px;
-    }
-
-    /* ─── VERTICALS ───────────────────────────────────────────── */
-
-    #verticals {
-      background-color: var(--bg-verticals);
-      border-top: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
-    }
-
-    .verticals-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background-color: var(--border-thin);
-    }
-
-    .vertical-card {
-      background-color: var(--bg-card);
-      padding: 3rem 3.5rem 3.5rem;
-      transition: background-color 0.2s ease;
-      cursor: default;
-    }
-
-    .vertical-card:hover {
-      background-color: var(--bg-card-hover);
-    }
-
-    .card-num {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      color: var(--accent);
-      margin-bottom: 2rem;
-    }
-
-    .card-title {
-      font-family: var(--display);
-      font-weight: 700;
-      font-size: 1.375rem;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 0.875rem;
-      line-height: 1.2;
-    }
-
-    .card-desc {
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    /* ─── CURRENTLY BUILDING ──────────────────────────────────── */
-
-    .project-list {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 0;
-      border-bottom: 0.5px solid var(--border-thin);
-    }
-
-    .project-row:first-child {
-      border-top: 0.5px solid var(--border-thin);
-    }
-
-    .project-name {
-      font-size: 0.975rem;
-      font-weight: 400;
-      color: var(--text);
-    }
-
-    .badge {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.6rem;
-      border: 0.5px solid currentColor;
-    }
-
-    .badge-active {
-      color: var(--accent);
-    }
-
-    .badge-progress {
-      color: var(--text-muted);
-    }
-
-    /* ─── FOOTER ──────────────────────────────────────────────── */
-
-    footer {
-      border-top: 0.5px solid var(--border);
-      padding: 2.5rem 5vw;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-
-    .footer-left {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .footer-copy {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 1.25rem;
-      align-items: center;
-    }
-
-    .footer-social a {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .footer-social a:hover {
-      color: var(--text);
-    }
-
-    .footer-connect {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity 0.2s ease;
-    }
-
-    .footer-connect:hover {
-      opacity: 0.7;
-    }
-
-    /* ─── FADE-IN ANIMATION ───────────────────────────────────── */
-
-    .fade-section {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
-
-    .fade-section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ─── RESPONSIVE ──────────────────────────────────────────── */
-
-    @media (max-width: 768px) {
-      nav {
-        padding: 0 6vw;
-      }
-
-      .nav-links {
-        gap: 1.25rem;
-      }
-
-      #hero {
-        padding: 5rem 6vw 3rem;
-      }
-
-      .two-col {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 4rem 6vw;
-      }
-
-      .verticals-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .vertical-card {
-        padding: 2.5rem 6vw;
-      }
-
-      footer {
-        padding: 2rem 6vw;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .nav-links a {
-        font-size: 0.65rem;
-        letter-spacing: 0.04em;
-      }
-
-      .hero-body {
-        font-size: 0.975rem;
-      }
-    }
-  </style>
+/* ─── RESPONSIVE ─── */
+@media(max-width:960px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero-main{grid-template-columns:1fr}
+  .hero-photo-col{min-height:380px;max-height:440px}
+  .hero-content-col{padding:32px 24px}
+  .hero-bottom-bar{grid-template-columns:1fr 1fr}
+  .the7-grid{grid-template-columns:repeat(4,1fr)}
+  .the7-panel-area{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr 1fr}
+  .lyc-hero{grid-template-columns:1fr}
+  .lyc-right{display:none}
+  .blog-grid{grid-template-columns:1fr}
+  .blog-card-full{grid-template-columns:1fr}
+  .connect-grid{grid-template-columns:1fr}
+  .mag-section{padding:60px 20px}
+  .nav{padding:0 20px}
+}
+@media(max-width:600px){
+  .the7-grid{grid-template-columns:repeat(2,1fr)}
+  .projects-grid{grid-template-columns:1fr}
+  .hero-bottom-bar{grid-template-columns:1fr 1fr}
+  .hero-stat-n{font-size:28px}
+}
+</style>
 </head>
 <body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef} = React;
 
-  <!-- ─── NAV ─────────────────────────────────────────────────── -->
-  <nav id="about">
-    <a class="nav-mark" href="#hero">MX</a>
-    <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#connect">Connect</a></li>
-    </ul>
-  </nav>
+const C = {
+  cream:"#f2ede4", black:"#0e0c08", muted:"#6b6560",
+  gold:"#c8a44a", orange:"#d4832a", purple:"#7c4dba",
+  red:"#d94f38", green:"#3a8c5a", border:"rgba(14,12,8,0.12)",
+};
 
-  <!-- ─── HERO ────────────────────────────────────────────────── -->
-  <section id="hero">
-    <p class="hero-label">Malcolm Xavier Davis — Pittsburgh, PA</p>
-    <h1 class="hero-heading">
-      <span>Builder.</span>
-      <span>Creator.</span>
-      <span>Operator.</span>
-    </h1>
-    <p class="hero-body">
-      Malcolm builds things that sit at the intersection of culture, creativity, and technology. From brand identities to AI pipelines, he's less interested in lanes and more interested in outcomes. Everything connects.
-    </p>
-    <a href="#work" class="hero-cta">See the Work ↓</a>
-  </section>
+const THE7 = [
+  {id:"01",key:"ART",icon:"◈",color:C.gold,tagline:"15+ YEARS OF COVER ART",blurb:"Gucci Mane. Complex. NTWRK. Gold leaf on panel. The work that started everything."},
+  {id:"02",key:"TECH",icon:"⌬",color:C.green,tagline:"I ARCHITECT.",blurb:"Full-stack AI systems. SaaS platforms. Tools built in Pittsburgh."},
+  {id:"03",key:"BUSINESS",icon:"◎",color:C.orange,tagline:"SYSTEMS THAT GENERATE.",blurb:"Highest-grossing Staples copy center. Head of Ops & Tech at BOCC."},
+  {id:"04",key:"COMMUNITY",icon:"♡",color:C.red,tagline:"CULTURE-FIRST.",blurb:"Love Yours Club. Colors by Numbers. Mental health through art."},
+  {id:"05",key:"HOBBIES",icon:"◉",color:C.purple,tagline:"THE REASON IT HAS SOUL.",blurb:"Batman: White Knight. Funko Pops. Keys. DVDs. The Archivist."},
+  {id:"06",key:"PHILOSOPHY",icon:"∞",color:"#9b6de0",tagline:"MORPH TRAP.",blurb:"Not prompting — architecting. AI that amplifies your voice."},
+  {id:"07",key:"BLOG",icon:"⧠",color:C.green,tagline:"SIGNAL LOG.",blurb:"Building in public. Real-time docs of art, AI, culture, Pittsburgh."},
+];
 
-  <!-- ─── THE WORK ─────────────────────────────────────────────── -->
-  <section id="work" class="two-col fade-section">
-    <p class="col-label">The Work</p>
-    <div class="col-body">
-      <p>
-        From designing mixtape covers in Pittsburgh basements to building AI-driven content pipelines and launching community-rooted brands, Malcolm's work has always followed a single thread — make something real and make it matter. The medium changes. The intention doesn't.
-      </p>
-    </div>
-  </section>
+const PROJECTS = [
+  {title:"FIRST PICK",year:"2026",type:"MIXED MEDIA COMMISSION",zone:"ART",color:C.gold,desc:"Mixed media for the Chuck Cooper Centennial Gala at Duquesne. Acrylic, gold leaf, resin on panel."},
+  {title:"AI CREATIVE CO.",year:"2025",type:"SAAS PLATFORM",zone:"TECH",color:C.green,desc:"13-screen AI creative team for solo artists. React/Vite, Supabase, Claude API, Stripe."},
+  {title:"2K LEAGUE HUB",year:"2026",type:"FULL-STACK APP",zone:"TECH",color:C.purple,desc:"NBA 2K26 stat tracking. Claude Vision OCR, dual-confirm verification, NBA-style award engine."},
+  {title:"LOVE YOURS CLUB",year:"2020–",type:"BRAND / COMMUNITY",zone:"COMMUNITY",color:C.red,desc:"Self-love art brand. Limited drops, signed trading cards, original artwork, mental health advocacy."},
+  {title:"BISHOP: CHRONO-CRISIS",year:"2025",type:"VIDEO GAME",zone:"TECH",color:"#9b6de0",desc:"Phaser 3 action-adventure built around the X-Men's Bishop. Full game design doc + Claude Code handoff."},
+  {title:"PAPERCLIP CAMPAIGN",year:"2025",type:"AI PIPELINE",zone:"TECH",color:C.orange,desc:"5-tool AI ad production: Claude → image gen → Suno → CapCut. Zero to broadcast in one system."},
+];
 
-  <!-- ─── VERTICALS ────────────────────────────────────────────── -->
-  <section id="verticals">
-    <div class="verticals-grid">
+const BLOG_POSTS = [
+  {num:"001",title:"First Pick: Making Art for the Chuck Cooper Centennial",tag:"ART",date:"APR 15, 2026",color:C.gold,excerpt:"What it felt like to put gold leaf on a canvas for the man who broke the NBA's color barrier."},
+  {num:"002",title:"The Morph Trap: Why I Architect AI Instead of Prompting It",tag:"PHILOSOPHY",date:"APR 2026",color:C.purple,excerpt:"Everyone's prompting. I'm building systems that think in my voice and get sharper the longer we work."},
+  {num:"003",title:"Reading the Murphyverse: A Collector's White Knight Guide",tag:"HOBBIES",date:"APR 2026",color:C.purple,excerpt:"Reading order, budget breakdown, and why Sean Murphy's Batman is the only run I'd buy in every format."},
+  {num:"004",title:"Staples. $1M. Original Systems. How It All Started.",tag:"BUSINESS",date:"COMING SOON",color:C.orange,excerpt:"Building the highest-grossing copy center in Staples history by designing a system that didn't exist yet."},
+];
 
-      <div class="vertical-card fade-section">
-        <p class="card-num">01</p>
-        <h2 class="card-title">Creative Direction</h2>
-        <p class="card-desc">
-          Visual identity, art direction, and brand systems for artists, founders, and independent operators. Built from concept to execution.
-        </p>
-      </div>
+const LYC_WORDS = ["LOVE","SELF","HEAL","GROW","REST","GIVE","KIND","RISE","FEEL","BOLD","REAL","FREE","OPEN","SAFE","STAY","SOFT","GOOD","SOUL","HOPE","CARE"];
 
-      <div class="vertical-card fade-section">
-        <p class="card-num">02</p>
-        <h2 class="card-title">AI + Tech</h2>
-        <p class="card-desc">
-          Workflow automation, AI-assisted creative tooling, and custom pipelines for people who build things. Practical infrastructure for real work.
-        </p>
-      </div>
+/* Scroll reveal */
+function useReveal(){
+  const ref = useRef(null);
+  const [vis,setVis] = useState(false);
+  useEffect(()=>{
+    if(!ref.current)return;
+    const obs = new IntersectionObserver(([e])=>{if(e.isIntersecting){setVis(true);obs.disconnect();}},{threshold:0.08,rootMargin:"0px 0px -50px 0px"});
+    obs.observe(ref.current);
+    return()=>obs.disconnect();
+  },[]);
+  return [ref,vis];
+}
+function Rev({children,delay=0,style={},className=""}){
+  const [ref,vis]=useReveal();
+  return <div ref={ref} className={`reveal${vis?" visible":""} ${className}`} style={{transitionDelay:`${delay}s`,...style}}>{children}</div>;
+}
 
-      <div class="vertical-card fade-section">
-        <p class="card-num">03</p>
-        <h2 class="card-title">Colors by Numbers</h2>
-        <p class="card-desc">
-          A design-led data project that translates cultural and community data into visual systems. Numbers that mean something.
-        </p>
-      </div>
-
-      <div class="vertical-card fade-section">
-        <p class="card-num">04</p>
-        <h2 class="card-title">Love Yours Club</h2>
-        <p class="card-desc">
-          A community brand built around presence, self-investment, and showing up. Rooted in Pittsburgh, built for everywhere.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ─── CURRENTLY BUILDING ────────────────────────────────────── -->
-  <section class="two-col fade-section">
-    <p class="col-label">Currently Building</p>
-    <div class="col-body">
-      <div class="project-list">
-
-        <div class="project-row">
-          <span class="project-name">Colors by Numbers — Vol. 1</span>
-          <span class="badge badge-active">Active</span>
-        </div>
-
-        <div class="project-row">
-          <span class="project-name">Ghost-TY — Smart TV Dashboard</span>
-          <span class="badge badge-active">Active</span>
-        </div>
-
-        <div class="project-row">
-          <span class="project-name">Love Yours Club — Spring Drop</span>
-          <span class="badge badge-active">Active</span>
-        </div>
-
-        <div class="project-row">
-          <span class="project-name">Fubko — Image to Funko</span>
-          <span class="badge badge-progress">In Progress</span>
-        </div>
-
+/* Ticker */
+function Ticker(){
+  const items = ["MIXED MEDIA ARTIST","CREATIVE TECHNOLOGIST","MENTAL HEALTH ACTIVIST","SYSTEMS ARCHITECT","PITTSBURGH, PA","AI CREATIVE DIRECTOR","LOVE YOURS CLUB","EVERYTHING DOCUMENTED. NOTHING WASTED."];
+  return(
+    <div className="ticker-wrap">
+      <div className="ticker-track">
+        {[...items,...items].map((t,i)=>(
+          <span key={i} className="ticker-item">
+            <span className="ticker-dot"/>
+            {t}
+          </span>
+        ))}
       </div>
     </div>
-  </section>
+  );
+}
 
-  <!-- ─── FOOTER ────────────────────────────────────────────────── -->
-  <footer id="connect" class="fade-section">
-    <div class="footer-left">
-      <p class="footer-copy">© 2026 Malcolm Xavier Davis. All rights reserved.</p>
-      <div class="footer-social">
-        <a href="#">Instagram</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">GitHub</a>
+const TWEAKS_DEFAULTS=/*EDITMODE-BEGIN*/{
+  "accentColor": "gold",
+  "heroStyle": "split",
+  "showTicker": true
+}/*EDITMODE-END*/;
+
+function App(){
+  const [activeZone,setActiveZone]=useState("ALL");
+  const [activeTab,setActiveTab]=useState(0);
+  const [tweaksOpen,setTweaksOpen]=useState(false);
+  const [tweaks,setTweaks]=useState(TWEAKS_DEFAULTS);
+  const [navScrolled,setNavScrolled]=useState(false);
+  const [mobileOpen,setMobileOpen]=useState(false);
+
+  useEffect(()=>{
+    const fn=()=>setNavScrolled(window.scrollY>48);
+    window.addEventListener("scroll",fn,{passive:true});
+    return()=>window.removeEventListener("scroll",fn);
+  },[]);
+
+  useEffect(()=>{
+    const h=e=>{
+      if(e.data?.type==="__activate_edit_mode")setTweaksOpen(true);
+      if(e.data?.type==="__deactivate_edit_mode")setTweaksOpen(false);
+    };
+    window.addEventListener("message",h);
+    window.parent.postMessage({type:"__edit_mode_available"},"*");
+    return()=>window.removeEventListener("message",h);
+  },[]);
+
+  const setTweak=(k,v)=>{
+    const next={...tweaks,[k]:v};
+    setTweaks(next);
+    window.parent.postMessage({type:"__edit_mode_set_keys",edits:next},"*");
+  };
+
+  const accent=tweaks.accentColor==="purple"?C.purple:tweaks.accentColor==="red"?C.red:C.gold;
+  const filtered=activeZone==="ALL"?PROJECTS:PROJECTS.filter(p=>p.zone===activeZone);
+  const zones=["ALL","ART","TECH","COMMUNITY","HOBBIES"];
+  const NAV=["ART","TECH","BUSINESS","COMMUNITY","HOBBIES","PHILOSOPHY","BLOG"];
+
+  const scrollTo=id=>{
+    const el=document.getElementById(id);
+    if(el)window.scrollTo({top:el.offsetTop-60,behavior:"smooth"});
+    setMobileOpen(false);
+  };
+
+  return(
+    <>
+      {/* NAV */}
+      <nav className={`nav${navScrolled?" scrolled":""}`}>
+        <div className="nav-logo" onClick={()=>window.scrollTo({top:0,behavior:"smooth"})}>
+          <span style={{fontFamily:"'Bebas Neue'",fontSize:24,color:C.black,letterSpacing:5}}>MX</span>
+          <span style={{fontFamily:"'Bebas Neue'",fontSize:24,color:accent}}>7</span>
+        </div>
+        <div className="nav-links">
+          {NAV.map(k=><a key={k} className="nav-link" onClick={()=>scrollTo(k.toLowerCase())}>{k}</a>)}
+        </div>
+        <div className="nav-right">
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <div className="live-dot"/>
+            <span style={{fontSize:9,color:C.green,letterSpacing:2}}>LIVE</span>
+          </div>
+          <button className="cta-nav" onClick={()=>scrollTo("connect")}>CONTACT →</button>
+          <button className={`hamburger${mobileOpen?" open":""}`} onClick={()=>setMobileOpen(v=>!v)}
+            style={{display:"none"}} ref={el=>{if(el)el.style.display="flex"}}>
+            <span className="ham-line"/><span className="ham-line"/><span className="ham-line"/>
+          </button>
+        </div>
+      </nav>
+
+      {mobileOpen&&(
+        <div className="mobile-nav">
+          {NAV.map(k=><div key={k} className="mnav-link" onClick={()=>scrollTo(k.toLowerCase())}>{k}</div>)}
+          <div style={{marginTop:24,fontSize:9,letterSpacing:2,color:C.muted}}>PGH, PA — 2026</div>
+        </div>
+      )}
+
+      {/* ─── HERO ─── */}
+      <div className="hero" data-screen-label="01 Hero">
+        {/* Top meta bar */}
+        <div className="hero-top-bar">
+          <div style={{display:"flex",gap:20,alignItems:"center"}}>
+            <span className="hero-top-meta">VOL. 1 · 2026</span>
+            <span style={{width:1,height:16,background:"rgba(14,12,8,0.15)",display:"inline-block"}}/>
+            <span className="hero-top-meta">PITTSBURGH, PA</span>
+          </div>
+          <span className="hero-top-issue">MALCOLM XAVIER — THE ARCHIVE</span>
+          <div style={{display:"flex",gap:20,alignItems:"center"}}>
+            <span className="hero-top-meta">MX7</span>
+            <div style={{display:"flex",alignItems:"center",gap:5}}>
+              <div className="live-dot"/>
+              <span style={{fontSize:8,color:C.green,letterSpacing:2}}>LIVE</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 2-col hero */}
+        <div className="hero-main">
+          {/* LEFT — Photo */}
+          <div className="hero-photo-col">
+            <div className="hero-photo-wrap">
+              <div className="hero-photo-ring"/>
+              {/* Corner brackets */}
+              <div className="hero-photo-corner" style={{top:16,left:16,borderWidth:"1px 0 0 1px"}}/>
+              <div className="hero-photo-corner" style={{top:16,right:16,borderWidth:"1px 1px 0 0"}}/>
+              <img src="uploads/photo-1776621569049.png" alt="Malcolm Xavier"
+                style={{width:"100%",display:"block",position:"relative",zIndex:2}}/>
+            </div>
+            <div className="hero-photo-col-label">MX · PITTSBURGH, PA</div>
+            {/* Gold accent bar on far left */}
+            <div style={{position:"absolute",left:0,top:0,bottom:0,width:6,background:accent,zIndex:5}}/>
+          </div>
+
+          {/* RIGHT — Content */}
+          <div className="hero-content-col">
+            {/* Top: roles */}
+            <div style={{animation:"fadeUp 0.7s ease both 0.1s"}}>
+              <p style={{fontSize:8,letterSpacing:5,color:C.muted,marginBottom:16}}>// THE ARCHIVE OF —</p>
+              {["MIXED MEDIA ARTIST","CREATIVE TECHNOLOGIST","MENTAL HEALTH ACTIVIST"].map(r=>(
+                <div key={r} className="hero-role-pill" style={{marginBottom:6,display:"block",width:"fit-content"}}>{r}</div>
+              ))}
+            </div>
+
+            {/* Center: giant name */}
+            <div style={{animation:"fadeUp 0.6s ease both 0.15s",margin:"24px 0"}}>
+              <div className="hero-giant">MALCOLM</div>
+              <div className="hero-giant" style={{color:accent}}>XAVIER</div>
+              <div style={{width:60,height:3,background:accent,marginTop:20}}/>
+            </div>
+
+            {/* Bottom: meta + CTAs */}
+            <div style={{animation:"fadeUp 0.7s ease both 0.3s"}}>
+              <p style={{fontSize:9,letterSpacing:1,color:C.muted,lineHeight:2.2,marginBottom:24}}>
+                <span style={{color:C.black,fontWeight:700,letterSpacing:3,display:"block",marginBottom:4}}>PITTSBURGH, PA</span>
+                15+ YEARS MAKING ART THAT LIVES IN CULTURE.<br/>
+                EVERYTHING DOCUMENTED. NOTHING WASTED.
+              </p>
+              <div className="hero-cta-group">
+                <button className="hero-btn-blk" onClick={()=>scrollTo("projects")}>VIEW PROJECTS →</button>
+                <button className="hero-btn-out" onClick={()=>scrollTo("blog")}>SIGNAL LOG →</button>
+                <button className="hero-btn-out" onClick={()=>scrollTo("connect")}>GET IN TOUCH →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stat strip */}
+        <div className="hero-bottom-bar">
+          {[{n:"15+",l:"YEARS DESIGN"},{n:"7",l:"WORLDS"},{n:"30+",l:"PROJECTS"},{n:"412",l:"PITTSBURGH"}].map(s=>(
+            <div key={s.n} className="hero-stat-cell">
+              <div className="hero-stat-n" style={{color:accent}}>{s.n}</div>
+              <div className="hero-stat-l">{s.l}</div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-    <a href="mailto:hello@malcolmxavier.com" class="footer-connect">Let's Connect →</a>
-  </footer>
 
-  <script>
-    // ─── Intersection Observer for fade-in sections
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
+      {/* ─── TICKER ─── */}
+      <Ticker/>
 
-    document.querySelectorAll('.fade-section').forEach((el) => observer.observe(el));
+      {/* ─── THE 7 ─── */}
+      <section className="mag-section cream" id="art" data-screen-label="02 The 7">
+        <Rev>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:8}}>
+            <div>
+              <div className="section-rule" style={{width:60,marginBottom:12}}/>
+              <p className="overline">// ARCHITECTURE</p>
+              <h2 className="display-xl" style={{marginTop:4}}>THE <span style={{color:accent}}>7</span></h2>
+            </div>
+            <p style={{fontSize:10,color:C.muted,textAlign:"right",lineHeight:2,maxWidth:240}}>
+              Seven dimensions.<br/>One complete system.<br/>Everything lives here.
+            </p>
+          </div>
+        </Rev>
 
-    // ─── Nav active link highlight on scroll
-    const sections = document.querySelectorAll('section[id], footer[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
+        <Rev delay={0.15}>
+          <div className="the7-grid" style={{borderTop:`2px solid ${C.black}`,borderLeft:`1px solid rgba(14,12,8,0.12)`}}>
+            {THE7.map((item,i)=>(
+              <div key={item.key} className={`the7-card${activeTab===i?" active":""}`}
+                onClick={()=>setActiveTab(i)}
+                style={{background:activeTab===i?C.black:"#f2ede4",color:activeTab===i?"#f2ede4":C.black}}>
+                <div className="the7-card-bar" style={{background:item.color,opacity:activeTab===i?1:0.3}}/>
+                <span className="the7-card-num" style={{color:activeTab===i?"rgba(242,237,228,0.25)":C.muted}}>{item.id}</span>
+                <div className="the7-card-icon" style={{color:activeTab===i?item.color:C.muted}}>{item.icon}</div>
+                <div className="the7-card-key">{item.key}</div>
+                <p className="the7-card-blurb" style={{color:activeTab===i?"rgba(242,237,228,0.55)":C.muted}}>{item.blurb}</p>
+              </div>
+            ))}
+          </div>
+          <div className="the7-panel-area" key={activeTab}>
+            <div className="the7-panel-left">
+              <p style={{fontSize:8,letterSpacing:4,color:THE7[activeTab].color,marginBottom:8}}>{THE7[activeTab].id} / 07</p>
+              <h3 className="display-lg" style={{marginBottom:12}}>{THE7[activeTab].key}</h3>
+              <p style={{fontSize:10,letterSpacing:3,color:THE7[activeTab].color,marginBottom:20}}>{THE7[activeTab].tagline}</p>
+              <p style={{fontSize:11,color:C.muted,lineHeight:2,maxWidth:340}}>
+                {THE7[activeTab].id==="01"&&"15+ years of cover art. Gucci Mane. Project Pat. Complex. NTWRK. First Pick. Mixed media on panel, gold leaf, resin. Art that lives in culture and doesn't ask permission."}
+                {THE7[activeTab].id==="02"&&"Full-stack AI systems. SaaS platforms. Pipelines. Tools built in Pittsburgh for problems that didn't have names yet. Every system thinks in my voice and makes decisions in my aesthetic."}
+                {THE7[activeTab].id==="03"&&"Built the highest-grossing copy center in Staples history. Now Head of Ops & Tech at BOCC. The machine runs because someone built it right the first time. Revenue isn't luck — it's design."}
+                {THE7[activeTab].id==="04"&&"Love Yours Club. Colors by Numbers. 412 Day. The work that exists because people need it — not because it's profitable. Mental health through art. Self-love as a practice, not a platitude."}
+                {THE7[activeTab].id==="05"&&"Batman: White Knight. Funko Pops. Keys and variants. DVDs. The Archivist. The human stuff that makes the work worth doing and the archive worth building."}
+                {THE7[activeTab].id==="06"&&"Not prompting — architecting. AI that amplifies your voice, not replaces it. The Xavier 7. Everything documented. Nothing wasted. The system is the art."}
+                {THE7[activeTab].id==="07"&&"Building in public. Real-time documentation of art, AI, culture, and Pittsburgh. The archive that never stops growing. Every entry a timestamp on the work."}
+              </p>
+            </div>
+            <div className="the7-panel-right">
+              <div className="the7-panel-ghost" style={{color:THE7[activeTab].color}}>{THE7[activeTab].id}</div>
+              <div style={{position:"relative",zIndex:2}}>
+                <div style={{fontSize:32,color:THE7[activeTab].color,marginBottom:20}}>{THE7[activeTab].icon}</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:36}}>
+                  {(()=>{
+                    const tags={
+                      "01":["Mixtape Covers","Mixed Media","Gold Leaf","Illustration","Acrylic on Panel"],
+                      "02":["React / Vite","Claude API","Supabase","Vercel","AI Pipelines"],
+                      "03":["Operations","Strategy","AI Workflows","Team Leadership"],
+                      "04":["Love Yours Club","Colors by Numbers","Mental Health","Art Access"],
+                      "05":["Murphyverse","Funko Pops","X-Men Keys","Uncanny #282"],
+                      "06":["Xavier 7","Morph Trap","Manifesto","Systems Thinking"],
+                      "07":["Build Logs","Essays","Case Studies","Culture"],
+                    }[THE7[activeTab].id]||[];
+                    return tags.map(t=>(
+                      <span key={t} style={{fontSize:8,letterSpacing:1,padding:"5px 12px",border:`1px solid rgba(242,237,228,0.12)`,color:"rgba(242,237,228,0.6)"}}>{t}</span>
+                    ));
+                  })()}
+                </div>
+                <div style={{paddingTop:28,borderTop:"1px solid rgba(242,237,228,0.1)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{fontSize:9,color:"rgba(242,237,228,0.4)",letterSpacing:1}}>EXPLORE THIS DIMENSION</span>
+                  <span style={{fontSize:16,color:THE7[activeTab].color}}>→</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Rev>
+      </section>
 
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            navLinks.forEach((link) => {
-              link.style.color = link.getAttribute('href') === `#${id}` ? 'var(--text)' : '';
-            });
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
+      {/* ─── PROJECTS ─── */}
+      <section className="mag-section" style={{background:"#ede8de"}} id="projects" data-screen-label="03 Projects">
+        <Rev>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:36}}>
+            <div>
+              <div className="section-rule" style={{width:60,marginBottom:12,background:C.black}}/>
+              <p className="overline">// THE WORK</p>
+              <h2 className="display-xl" style={{marginTop:4}}>PROJECTS</h2>
+            </div>
+            <div className="proj-filters">
+              {zones.map(z=>(
+                <button key={z} className={`pfil${activeZone===z?" active":""}`} onClick={()=>setActiveZone(z)}>{z}</button>
+              ))}
+            </div>
+          </div>
+        </Rev>
+        <div className="projects-grid">
+          {filtered.map((p,i)=>(
+            <Rev key={p.title} delay={i*0.07}>
+              <div className="proj-card" style={{height:"100%"}}>
+                <div className="proj-card-shimmer"/>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                  <span className="proj-zone" style={{color:p.color,borderColor:p.color+"55"}}>{p.zone}</span>
+                  <span className="proj-year">{p.year}</span>
+                </div>
+                <div className="proj-title">{p.title}</div>
+                <div className="proj-type">{p.type}</div>
+                <p className="proj-desc">{p.desc}</p>
+                <div className="proj-arrow" style={{color:p.color}}>
+                  <span>VIEW PROJECT</span><span>→</span>
+                </div>
+                <div style={{position:"absolute",bottom:0,left:0,right:0,height:3,background:p.color,transform:"scaleX(0)",transition:"transform 0.3s",transformOrigin:"left"}}
+                  ref={el=>{if(el){el.parentElement.addEventListener("mouseenter",()=>el.style.transform="scaleX(1)");el.parentElement.addEventListener("mouseleave",()=>el.style.transform="scaleX(0)");}}}/>
+              </div>
+            </Rev>
+          ))}
+        </div>
+      </section>
 
-    sections.forEach((s) => sectionObserver.observe(s));
-  </script>
+      {/* ─── LOVE YOURS CLUB ─── */}
+      <section id="community" data-screen-label="04 Love Yours Club">
+        <div className="lyc-hero">
+          <div className="lyc-left">
+            <div className="lyc-ghost">♡</div>
+            <Rev>
+              <div className="lyc-badge">04 / COMMUNITY</div>
+              <h2 className="lyc-title">LOVE<br/>YOURS<br/><span style={{color:"rgba(242,237,228,0.4)"}}>CLUB</span></h2>
+            </Rev>
+            <Rev delay={0.15}>
+              <p className="lyc-desc">
+                A self-love art brand built on the belief that mental health work looks different for everyone — and that art is one of the most direct paths there.<br/><br/>
+                Limited drops. Signed trading cards. Original artwork. A community that actually shows up.
+              </p>
+              <button className="lyc-cta">VISIT LOVEYOURSCLUB.COM ↗</button>
+            </Rev>
+          </div>
+          <div className="lyc-right">
+            {LYC_WORDS.map((w,i)=>(
+              <div key={w} className="lyc-word">{w}</div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* ─── SIGNAL LOG ─── */}
+      <section className="mag-section cream" id="blog" data-screen-label="05 Signal Log">
+        <Rev>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:8}}>
+            <div>
+              <div className="section-rule" style={{width:60,marginBottom:12,background:C.black}}/>
+              <p className="overline">// 07 — BLOG</p>
+              <h2 className="display-xl" style={{marginTop:4}}>SIGNAL <span style={{color:C.green}}>LOG</span></h2>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <div className="live-dot"/>
+              <span style={{fontSize:9,color:C.green,letterSpacing:2}}>UPDATED REGULARLY</span>
+            </div>
+          </div>
+        </Rev>
+        <div className="blog-grid">
+          {BLOG_POSTS.map((post,i)=>(
+            <Rev key={post.num} delay={i*0.08}>
+              <div className={`blog-card${i<2?" blog-card-full":""}`}>
+                {i<2?(
+                  <>
+                    <div className="blog-num-big" style={{color:post.color}}>{post.num}</div>
+                    <div>
+                      <div style={{marginBottom:10}}>
+                        <span className="blog-tag-pill" style={{color:post.color,borderColor:post.color+"55"}}>{post.tag}</span>
+                        <span className="blog-date" style={{marginLeft:10}}>{post.date}</span>
+                      </div>
+                      <div className="blog-title-lg">{post.title}</div>
+                      <p className="blog-excerpt">{post.excerpt}</p>
+                    </div>
+                    <div className="blog-read">READ →</div>
+                  </>
+                ):(
+                  <>
+                    <div style={{marginBottom:10}}>
+                      <span className="blog-tag-pill" style={{color:post.color,borderColor:post.color+"55"}}>{post.tag}</span>
+                      <span className="blog-date" style={{marginLeft:10}}>{post.date}</span>
+                    </div>
+                    <div className="blog-num-big" style={{color:post.color,fontSize:40,marginBottom:8}}>{post.num}</div>
+                    <div className="blog-title-lg" style={{fontSize:22}}>{post.title}</div>
+                    <p className="blog-excerpt">{post.excerpt}</p>
+                    <div className="blog-read">READ →</div>
+                  </>
+                )}
+              </div>
+            </Rev>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── PHILOSOPHY ─── */}
+      <section className="philosophy-bg" id="philosophy" data-screen-label="06 Philosophy">
+        <div className="phil-ghost">ARCHITECT</div>
+        <Rev style={{position:"relative",maxWidth:640,margin:"0 auto"}}>
+          <p style={{fontSize:8,letterSpacing:5,color:C.purple,marginBottom:16}}>// 06 — PHILOSOPHY</p>
+          <h2 className="display-xl" style={{color:"#f2ede4",marginBottom:32,letterSpacing:3}}>THE<br/>MORPH TRAP</h2>
+          <p style={{fontSize:13,color:"rgba(242,237,228,0.55)",lineHeight:2.2,marginBottom:8}}>
+            Everyone's prompting AI. Getting average outputs<br/>from average inputs.
+          </p>
+          <p style={{fontSize:13,color:"rgba(242,237,228,0.85)",lineHeight:2.2,marginBottom:44}}>
+            I'm architecting. Building systems that think in my voice, make decisions in my aesthetic, and get sharper with every project. The AI doesn't replace the creator — it amplifies whoever's running the machine.
+          </p>
+          <div className="morph-box" style={{borderColor:`${accent}55`,background:`linear-gradient(135deg,${accent}10,transparent)`}}>
+            <div style={{fontFamily:"'Bebas Neue'",fontSize:36,color:accent,letterSpacing:8}}>I DO NOT PROMPT.</div>
+            <div style={{fontFamily:"'Bebas Neue'",fontSize:36,color:"#f2ede4",letterSpacing:8}}>I ARCHITECT.</div>
+          </div>
+        </Rev>
+      </section>
+
+      {/* ─── CONNECT ─── */}
+      <section className="mag-section" style={{background:"#ede8de"}} id="connect" data-screen-label="07 Connect">
+        <Rev>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:8}}>
+            <div>
+              <div className="section-rule" style={{width:60,marginBottom:12,background:C.black}}/>
+              <p className="overline">// CONNECT</p>
+              <h2 className="display-xl" style={{marginTop:4}}>FIND <span style={{color:accent}}>ME</span></h2>
+            </div>
+            <p style={{fontSize:10,color:C.muted,textAlign:"right",lineHeight:2,maxWidth:280}}>
+              Building in Pittsburgh.<br/>Working everywhere.<br/>Open to remote AI roles.
+            </p>
+          </div>
+        </Rev>
+        <Rev delay={0.15}>
+          <div className="connect-grid">
+            {[
+              {label:"MALCOLMXAVIER.COM",sub:"Portfolio Hub",color:accent},
+              {label:"LOVEYOURSCLUB.COM",sub:"Community Art Brand",color:C.red},
+              {label:"LINKEDIN",sub:"Professional + Build Logs",color:C.purple},
+              {label:"INSTAGRAM",sub:"Art. Drops. Life.",color:C.orange},
+            ].map(l=>(
+              <div key={l.label} className="connect-card">
+                <div>
+                  <div className="con-label" style={{color:l.color}}>{l.label}</div>
+                  <div className="con-sub">{l.sub}</div>
+                </div>
+                <div className="con-arrow" style={{color:l.color}}>↗</div>
+              </div>
+            ))}
+          </div>
+          <div style={{marginTop:24,padding:"22px 28px",background:"#fff8f0",border:`1px solid rgba(14,12,8,0.08)`,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <div style={{fontSize:9,color:C.green,letterSpacing:3,marginBottom:4}}>EVERYTHING DOCUMENTED.</div>
+              <div style={{fontSize:9,color:accent,letterSpacing:3}}>NOTHING WASTED.</div>
+            </div>
+            <div style={{fontFamily:"'Bebas Neue'",fontSize:48,color:"rgba(14,12,8,0.06)",letterSpacing:8}}>MX7</div>
+          </div>
+        </Rev>
+      </section>
+
+      {/* ─── FOOTER ─── */}
+      <footer>
+        <div className="footer-sig">
+          <span style={{fontFamily:"'Bebas Neue'",fontSize:20,color:"rgba(242,237,228,0.4)",letterSpacing:5}}>MX</span>
+          <span style={{fontFamily:"'Bebas Neue'",fontSize:20,color:accent}}>7</span>
+        </div>
+        <div style={{fontSize:9,color:"rgba(242,237,228,0.3)",letterSpacing:2}}>PITTSBURGH, PA — 2026</div>
+        <div style={{fontSize:9,color:"rgba(242,237,228,0.3)",letterSpacing:2}}>EVERYTHING DOCUMENTED. NOTHING WASTED.</div>
+      </footer>
+
+      {/* TWEAKS */}
+      <div className={`tweaks-panel${tweaksOpen?" open":""}`}>
+        <div className="tw-title">TWEAKS</div>
+        <div className="tw-row">
+          <div className="tw-label">ACCENT COLOR</div>
+          <div className="tw-opts">
+            {[["gold","#c8a44a"],["purple","#7c4dba"],["red","#d94f38"]].map(([k,hex])=>(
+              <button key={k} className={`tw-opt${tweaks.accentColor===k?" active":""}`} onClick={()=>setTweak("accentColor",k)}>
+                <span style={{display:"inline-block",width:8,height:8,borderRadius:"50%",background:hex,marginRight:4,verticalAlign:"middle"}}/>
+                {k.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="tw-row">
+          <div className="tw-label">HERO STYLE</div>
+          <div className="tw-opts">
+            {["split","centered"].map(d=>(
+              <button key={d} className={`tw-opt${tweaks.heroStyle===d?" active":""}`} onClick={()=>setTweak("heroStyle",d)}>{d.toUpperCase()}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>
